@@ -6,18 +6,21 @@ import time
 # From the twitter developer's account
 #consumer key, consumer secret, access token, access secret.
 
-# I've regenerated these tokens, so do not copy them xDxD
-ckey='YI3WOidCTeeYCVDBjLcgXzvpW'
-csecret='mtUBQJsFZ1Tg7h3sFbix6Pb81kcow1eVId6OX44FL8DBbWpqaI'
-atoken = '793442207508287491-6FQokeVwbrjX7iIdOT0E0uXCLEi784q'
-asecret = 'iSbK56Fdt9JgdysyoFWpvahhsQFjQqlPQpVspyjaxTJrq'
+
+api_key = input('Enter the API Key: \n')
+secret_api_key = input('Enter the API secret key: \n')
+access_token = input('Enter Access token: \n')
+access_token_secret = input('Access token secret: \n')
 
 class listener(StreamListener):
     def on_data(self, data):
         try:
-            print(data)
+            # Trimming out tweets from the data 
+            tweet = data.split(',"text":"')[1].split('","source"')[0]
+
+ 	    # Appending
             file = open('database.csv', 'a')
-            file.write(data)
+            file.write(tweet)
             file.write('\n')
             file.write('\n')
             file.close()
@@ -27,8 +30,8 @@ class listener(StreamListener):
     def on_error(self, status):
         print (status)
 
-auth = OAuthHandler(ckey, csecret)
-auth.set_access_token(atoken, asecret)
+auth = OAuthHandler(api_key, secret_api_key)
+auth.set_access_token(access_token, access_token_secret)
 
 twitterStream = Stream(auth, listener())
 twitterStream.filter(track=["car"])    
